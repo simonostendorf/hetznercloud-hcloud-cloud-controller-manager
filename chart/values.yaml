@@ -103,3 +103,13 @@ nodeSelector: {}
 robot:
   # Set to true to enable support for Robot (Dedicated) servers.
   enabled: false
+
+# Optional annotations to add to the controller pod.
+podAnnotations: {}
+
+# Optional additional labels to add to the controller pod.
+podLabels: {}
+
+# Optional commands that runs before starting the hccm binary.
+# This can be used to source a script or set environment variables.
+customBeforeCommands: []
