@@ -64,22 +64,26 @@ spec:
             - "/bin/bash"
             - "-c"
             {{- range $cmd := .Values.customBeforeCommands }}
-            - {{ $cmd | quote }}
-            - "&&"
+            {{- if eq (index $.Values.customBeforeCommands 0) $cmd }}
+            - {{ $cmd }}
+            {{- else }}
+              {{ $cmd | quote | nindent 14 }}
+            {{- end }}
+              "&&"
             {{- end }}
             {{- end }}
-            - "/bin/hcloud-cloud-controller-manager"
+              "/bin/hcloud-cloud-controller-manager"
             {{- range $key, $value := $.Values.args }}
             {{- if not (eq $value nil) }}
-            - "--{{ $key }}{{ if $value }}={{ $value }}{{ end }}"
+              "--{{ $key }}{{ if $value }}={{ $value }}{{ end }}"
             {{- end }}
             {{- end }}
             {{- if $.Values.networking.enabled }}
-            - "--allocate-node-cidrs=true"
-            - "--cluster-cidr={{ $.Values.networking.clusterCIDR }}"
+              "--allocate-node-cidrs=true"
+              "--cluster-cidr={{ $.Values.networking.clusterCIDR }}"
             {{- end }}
             {{- if (eq (int $.Values.replicaCount) 1) }}
-            - "--leader-elect=false"
+              "--leader-elect=false"
             {{- end }}
           env:
             {{- range $key, $value := $.Values.env }}
